@@ -36,14 +36,19 @@ class PCA():
             Xp: The reduced data matrix after PCA of shape [n_samples, n_components].
         """
         ### YOUR CODE HERE
+        print(f"X: {self.X[0][:10]}")
         print(np.shape(self.X))
-        # mean_x = np.mean(self.X)
-        # for i in range(len(self.X)):
-        #     self.X[i] = self.X[i] - mean_x
-        exit(-1)
+        mean_x = np.mean(self.X)
+        for r in range(len(self.X)):
+            for c in range(len(self.X[r])):
+                self.X[r][c] = self.X[r][c] - mean_x
 
-
-
+        print(f"X: {self.X[0][:10]}")
+        print(f"len of X: {len(self.X)}")
+        x = len(self.X)
+        y = len(self.X[0])
+        print(f"len is {x * y}")
+        exit(0)
         ### END YOUR CODE
 
     def get_reduced(self):
