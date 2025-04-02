@@ -1,10 +1,21 @@
 from helper import load_data, show_images
 from solution import PCA, reconstruct_error
 import numpy as np
+import os
 
 def test_pca():
-    dataloc = "../data/USPS.mat"
-    output_dir = "./outputs/"
+    cwd = os.getcwd()
+    print(os.listdir(cwd + "/data"))
+    print(cwd)
+    dataloc = cwd + "/data/USPS.mat"
+    output_dir = cwd + "/outputs/"
+
+    if not os.path.isdir(cwd + output_dir):
+        os.mkdir(cwd + "/outputs")
+
+    if not os.path.isfile(dataloc):
+        raise FileNotFoundError("path(s) not found")
+
     A = load_data(dataloc)
     ps = [10, 50, 100, 200]
     for p in ps:
