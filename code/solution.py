@@ -17,11 +17,11 @@ In this assignment, you may want to use following helper functions:
 class PCA():
 
     def __init__(self, X, n_components):
-        '''
+        """
         Args:
             X: The data matrix of shape [n_samples, n_features].
             n_components: The number of principal components. A scaler number.
-        '''
+        """
 
         self.n_components = n_components
         self.X = X
@@ -29,31 +29,36 @@ class PCA():
 
     
     def _do_pca(self):
-        '''
+        """
         To do PCA decomposition.
         Returns:
             Up: Principal components (transform matrix) of shape [n_features, n_components].
             Xp: The reduced data matrix after PCA of shape [n_samples, n_components].
-        '''
+        """
         ### YOUR CODE HERE
+        print(np.shape(self.X))
+        # mean_x = np.mean(self.X)
+        # for i in range(len(self.X)):
+        #     self.X[i] = self.X[i] - mean_x
+        exit(-1)
 
 
 
         ### END YOUR CODE
 
     def get_reduced(self):
-        '''
+        """
         To return the reduced data matrix.
         Args:
-            X: The data matrix with shape [n_any, n_features] or None. 
+            X: The data matrix with shape [n_any, n_features] or None.
                If None, return reduced training X.
         Returns:
             Xp: The reduced data matrix of shape [n_any, n_components].
-        '''
+        """
         return self.Xp
 
     def reconstruction(self, Xp):
-        '''
+        """
         To reconstruct reduced data given principal components Up.
 
         Args:
@@ -61,7 +66,7 @@ class PCA():
 
         Return:
         X_re: The reconstructed matrix of shape [n_samples, n_features].
-        '''
+        """
         ### YOUR CODE HERE
 
 
@@ -70,15 +75,15 @@ class PCA():
 
 
 def reconstruct_error(A, B):
-    '''
+    """
     To compute the reconstruction error.
 
-    Args: 
+    Args:
     A & B: Two matrices needed to be compared with. Should be of same shape.
 
-    Return: 
+    Return:
     error: the Frobenius norm's square of the matrix A-B. A scaler number.
-    '''
+    """
     ### YOUR CODE HERE
 
 

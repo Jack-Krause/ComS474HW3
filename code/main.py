@@ -5,16 +5,14 @@ import os
 
 def test_pca():
     cwd = os.getcwd()
-    print(os.listdir(cwd + "/data"))
-    print(cwd)
-    dataloc = cwd + "/data/USPS.mat"
-    output_dir = cwd + "/outputs/"
+    dataloc = os.path.join(cwd, "data", "USPS.mat")
+    output_dir = os.path.join(cwd, "outputs")
 
-    if not os.path.isdir(cwd + output_dir):
-        os.mkdir(cwd + "/outputs")
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
 
     if not os.path.isfile(dataloc):
-        raise FileNotFoundError("path(s) not found")
+        raise FileNotFoundError(f"file not found: {dataloc}")
 
     A = load_data(dataloc)
     ps = [10, 50, 100, 200]
