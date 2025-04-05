@@ -25,14 +25,19 @@ if os.path.isfile(data_path):
             label_counts = group['Play Tennis'].value_counts(normalize=True)
             probs = [label_counts.get('Yes', 0), label_counts.get('No', 0)]
             group_entropy = entropy(probs, base=2)
-            print(f"{val}: P(Yes) = {probs[0]:.3f}, P(No) = {probs[1]:.3f} -> entropy= {group_entropy:.3f}")
-
             weight = len(group) / len(data)
-            remainder += weight * group_entropy
+            weighted_entropy = weight * group_entropy
+
+            print(f"{val}: P(Yes) = {probs[0]:.3f}, P(No) = {probs[1]:.3f} -> "
+                  f"entropy = {group_entropy:.3f}, weight = {weight:.3f}, "
+                  f"weighted = {weighted_entropy:.3f}")
+
+            remainder += weighted_entropy
 
         info_gain = total_entropy - remainder
         information_gains[attr] = info_gain
-        print(f"{attr}: Info Gain = {info_gain:.3f}\n")
+        print(f"Total remainder (expected entropy): {remainder:.3f}")
+        print(f"{attr}: Info Gain = {total_entropy:.3f} - {remainder:.3f} = {info_gain:.3f}\n")
 
     best_attr = max(information_gains, key=information_gains.get)
     print(f"\nBest attribute to split on: {best_attr}")
