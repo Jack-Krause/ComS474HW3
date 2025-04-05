@@ -38,17 +38,19 @@ class PCA():
         ### YOUR CODE HERE
         print(f"X: {self.X[0][:10]}")
         print(np.shape(self.X))
-        mean_x = np.mean(self.X)
+        # mean_x = np.mean(self.X)
+        mean_x = round(np.mean(self.X), 4)
+
         for r in range(len(self.X)):
             for c in range(len(self.X[r])):
                 self.X[r][c] = self.X[r][c] - mean_x
 
-        print(f"X: {self.X[0][:10]}")
-        print(f"len of X: {len(self.X)}")
-        x = len(self.X)
-        y = len(self.X[0])
-        print(f"len is {x * y}")
-        exit(0)
+
+        for i in range(len(self.X)):
+            for j in range(len(self.X), -1):
+                pass
+
+        return 0, 0
         ### END YOUR CODE
 
     def get_reduced(self):
