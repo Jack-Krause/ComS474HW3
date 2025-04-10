@@ -42,30 +42,35 @@ class PCA():
         # X_bar = np.mean(self.X)
         # X_bar = round(np.mean(self.X, keepdims=True), 4)
         # 1. find mean
-        X_bar = np.mean(self.X, keepdims=True)
+        X_bar = np.mean(self.X, keepdims=True, axis=0)
+
         # 2. center the data
         centered_X = self.X - X_bar
+
         # 3. calculate the covariance of the centered data
-        covariance_X = np.cov(centered_X)
+        covariance_X = np.cov(centered_X, rowvar=False)
+
         # 4. perform eigendecomposition (vectors need to be sorted by values)
         eigenvalues, eigenvectors = np.linalg.eig(covariance_X)
-        eigenvectors = sorted(eigenvectors)
-        # 5. The transition matrix is Up: (d x n_components)
-        self.Up = eigenvectors[: self.n_components]
+
+        # sort the eigenvectors (desc) by corresponding eigenvalues
+        idx = np.argsort(eigenvalues)[:: -1]
+        eigenvectors = eigenvectors[:, idx]
+
+        # 5. The transition matrix is Up: (n_features x n_components)
+        self.Up = eigenvectors[:, :self.n_components]
+
         # 6. apply the transition matrix on centered X
+        self.Xp = centered_X @ self.Up
         new_X = (np.transpose(self.Up) @ centered_X)
+
         # 7. reapply the transition matrix
         reconstructed_centered = new_X @ self.Up
+
         # 8. add back the mean
         reconstructed = reconstructed_centered + X_bar
 
-
-
-
-
-
-
-        return 0, 0
+        return self.Up, self.Xp
         ### END YOUR CODE
 
     def get_reduced(self):
@@ -107,7 +112,7 @@ def reconstruct_error(A, B):
     error: the Frobenius norm's square of the matrix A-B. A scaler number.
     """
     ### YOUR CODE HERE
-
+    return np.linalg.norm(A - B, ord='fro')**2
 
 
     ### END YOUR CODE
