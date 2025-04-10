@@ -1,0 +1,22 @@
+_do_pca:
+#input X dim (N * d
+step 1. self.X_bar X.mean(0, keepdim=True) 
+
+step 2. center the data: centered_X self.X - self.X_bar
+
+step 3. calculate the covariance: covariance_X = np.cov(centered_X)
+
+step 4. eigen decomposition: eigenvalues, eigenvectors = np.linalg.eig(covariance_X)
+eigenvectors won't be sorted, so we need to sort the vectors based on values
+
+step 5. Up is the transition matrix: (d x n_components)
+Up = vectors[: n_components]
+
+step 6. Apply the Up (transition matrix) on the centered X
+new_X = (Up @ centered_X^T^T (something like this)
+
+7. reapply the transition matrix
+reconstructed_centered = new_X @ Up
+
+8. reconstructed = reconstructed_centered + self.X_bar
+#add the mean back

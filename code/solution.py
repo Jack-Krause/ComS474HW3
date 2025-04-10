@@ -34,21 +34,36 @@ class PCA():
         Returns:
             Up: Principal components (transform matrix) of shape [n_features, n_components].
             Xp: The reduced data matrix after PCA of shape [n_samples, n_components].
+
         """
         ### YOUR CODE HERE
         print(f"X: {self.X[0][:10]}")
         print(np.shape(self.X))
-        # mean_x = np.mean(self.X)
-        mean_x = round(np.mean(self.X), 4)
+        # X_bar = np.mean(self.X)
+        # X_bar = round(np.mean(self.X, keepdims=True), 4)
+        # 1. find mean
+        X_bar = np.mean(self.X, keepdims=True)
+        # 2. center the data
+        centered_X = self.X - X_bar
+        # 3. calculate the covariance of the centered data
+        covariance_X = np.cov(centered_X)
+        # 4. perform eigendecomposition (vectors need to be sorted by values)
+        eigenvalues, eigenvectors = np.linalg.eig(covariance_X)
+        eigenvectors = sorted(eigenvectors)
+        # 5. The transition matrix is Up: (d x n_components)
+        self.Up = eigenvectors[: self.n_components]
+        # 6. apply the transition matrix on centered X
+        new_X = (np.transpose(self.Up) @ centered_X)
+        # 7. reapply the transition matrix
+        reconstructed_centered = new_X @ self.Up
+        # 8. add back the mean
+        reconstructed = reconstructed_centered + X_bar
 
-        for r in range(len(self.X)):
-            for c in range(len(self.X[r])):
-                self.X[r][c] = self.X[r][c] - mean_x
 
 
-        for i in range(len(self.X)):
-            for j in range(len(self.X), -1):
-                pass
+
+
+
 
         return 0, 0
         ### END YOUR CODE
