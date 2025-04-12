@@ -25,53 +25,38 @@ class PCA():
 
         self.n_components = n_components
         self.X = X
+        self.mean = np.mean(self.X, axis=0)
         self.Up, self.Xp = self._do_pca()
 
-    
     def _do_pca(self):
         """
         To do PCA decomposition.
         Returns:
             Up: Principal components (transform matrix) of shape [n_features, n_components].
             Xp: The reduced data matrix after PCA of shape [n_samples, n_components].
-
         """
         ### YOUR CODE HERE
-        print(f"X: {self.X[0][:10]}")
-        print(np.shape(self.X))
-        # X_bar = np.mean(self.X)
-        # X_bar = round(np.mean(self.X, keepdims=True), 4)
-        # 1. find mean
-        X_bar = np.mean(self.X, keepdims=True, axis=0)
 
-        # 2. center the data
-        centered_X = self.X - X_bar
+        # 1. center the data
+        centered_X = self.X - self.mean
 
-        # 3. calculate the covariance of the centered data
+        # 2. compute covariance matrix
         covariance_X = np.cov(centered_X, rowvar=False)
 
-        # 4. perform eigendecomposition (vectors need to be sorted by values)
+        # 3. eigendecomposition
         eigenvalues, eigenvectors = np.linalg.eig(covariance_X)
 
-        # sort the eigenvectors (desc) by corresponding eigenvalues
-        idx = np.argsort(eigenvalues)[:: -1]
+        # 4. sort eigenvectors by eigenvalue magnitude
+        idx = np.argsort(eigenvalues)[::-1]
         eigenvectors = eigenvectors[:, idx]
 
-        # 5. The transition matrix is Up: (n_features x n_components)
-        self.Up = eigenvectors[:, :self.n_components]
+        # 5. reduce
+        Up = eigenvectors[:, :self.n_components]
+        Xp = np.dot(centered_X, Up)
 
-        # 6. apply the transition matrix on centered X
-        self.Xp = centered_X @ self.Up
-        new_X = (np.transpose(self.Up) @ centered_X)
-
-        # 7. reapply the transition matrix
-        reconstructed_centered = new_X @ self.Up
-
-        # 8. add back the mean
-        reconstructed = reconstructed_centered + X_bar
-
-        return self.Up, self.Xp
+        return Up, Xp
         ### END YOUR CODE
+
 
     def get_reduced(self):
         """
@@ -95,9 +80,8 @@ class PCA():
         X_re: The reconstructed matrix of shape [n_samples, n_features].
         """
         ### YOUR CODE HERE
-
-
-
+        X_reconstructed = np.dot(Xp, self.Up.T) + self.mean
+        return X_reconstructed
         ### END YOUR CODE
 
 
